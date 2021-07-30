@@ -4,7 +4,7 @@ import requests
 def main():
     ask = input("would you like to view a campaign\'s data?\n")
     if "y" in ask:
-        with open('data.json') as f:
+        with open('test.json') as f:
             data = json.load(f)
             for campaign in data:
                 print(campaign)
