@@ -6,6 +6,7 @@ from PyQt5.QtCore import pyqtSignal
 import sys
 import requests
 import json
+import time
 
 
 class ThreadClass(QtCore.QThread):
@@ -18,23 +19,24 @@ class ThreadClass(QtCore.QThread):
         self.is_running = True
         
     def run(self):
-
+        duration = 1
         with open("data/history.json") as h:
             historyData = json.load(h)
             event = historyData["lastEvent"]
-
-            with open('data/data.json') as f:
-                data = json.load(f)
-                info = data[event]
-                for entry in info:
-                    eventCode = entry["event-code"]
-                    userCode = entry["user"]
-                print(eventCode,userCode)
-                urlGen = f"https://tiltify.com/api/v3/users/{userCode}/campaigns/{eventCode}"
-                response = requests.get(urlGen)
-                tiltifyData = json.loads(response.text)
-                total = tiltifyData["data"]["totalAmountRaised"]
-                print(total)
+            while True:
+                with open('data/data.json') as f:
+                    time.sleep(duration)
+                    data = json.load(f)
+                    info = data[event]
+                    for entry in info:
+                        eventCode = entry["event-code"]
+                        userCode = entry["user"]
+                    print(eventCode,userCode)
+                    urlGen = f"https://tiltify.com/api/v3/users/{userCode}/campaigns/{eventCode}"
+                    response = requests.get(urlGen)
+                    tiltifyData = json.loads(response.text)
+                    total = tiltifyData["data"]["totalAmountRaised"]
+                    print(total)
 
     def stop(self):
         self.is_running = False

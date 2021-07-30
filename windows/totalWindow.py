@@ -40,4 +40,5 @@ class totalWindow(QMainWindow):
 
     def closeEvent(self, event):
         self.window_closed.emit()
+        self.stopFeed()
         event.accept()
