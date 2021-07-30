@@ -1,5 +1,5 @@
 from windows.totalWindow import totalWindow
-from tools.palUtilities import readHistory
+from tools.palUtilities import VERSION, readHistory
 from tools.errorDefs import NoCampaignError, NoPreviousFileError
 from windows.fileFetchWindow import fromFileWindow
 from PyQt5 import QtGui, QtCore
@@ -18,7 +18,7 @@ class MainWindow(QMainWindow):
     def initUI(self):
         
         # Creates the window.
-        self.setWindowTitle("TiltiPal v0.0.1")
+        self.setWindowTitle(f"TiltiPal {VERSION}")
         self.setWindowIcon(QtGui.QIcon('img/logo.png'))
         self.setFixedSize(400, 290)
         #centers application
@@ -84,6 +84,7 @@ class MainWindow(QMainWindow):
             self.writeSelectedSaveFile(filePath)
             fileName = os.path.basename(filePath)
             self.l3.setText(fileName)
+            self.chooseFromFilesWindow()
 
     # updates the save data file with the selection
     def writeSelectedSaveFile(self,fileName):
