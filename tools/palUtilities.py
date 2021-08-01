@@ -1,7 +1,7 @@
 from tools.errorDefs import NoCampaignError, NoPreviousFileError
 import json
 
-VERSION = "v0.0.1"
+VERSION = "v0.0.2"
 
 def readHistory():
     with open('data/history.json') as f:
