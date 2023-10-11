@@ -11,8 +11,8 @@ import time
 
 class ThreadClass(QtCore.QThread):
 
-    any_signal = QtCore.pyqtSignal(int)
-    
+    message_sent = QtCore.pyqtSignal(str)
+
     def __init__(self, parent=None,index=0):
         super(ThreadClass, self).__init__(parent)
         self.index=index
@@ -20,6 +20,9 @@ class ThreadClass(QtCore.QThread):
         
     def run(self):
         duration = 1
+        currency = "$"
+        # TODO allow user to select duration and grab currency from the data file
+
         with open("data/history.json") as h:
             historyData = json.load(h)
             event = historyData["lastEvent"]
@@ -31,12 +34,15 @@ class ThreadClass(QtCore.QThread):
                     for entry in info:
                         eventCode = entry["event-code"]
                         userCode = entry["user"]
-                    print(eventCode,userCode)
                     urlGen = f"https://tiltify.com/api/v3/users/{userCode}/campaigns/{eventCode}"
                     response = requests.get(urlGen)
                     tiltifyData = json.loads(response.text)
                     total = tiltifyData["data"]["totalAmountRaised"]
-                    print(total)
+                    with open("total.txt", "w") as t:
+                        num = f"{currency}{total:,.2f}"
+                        t.write(num)
+                        self.message_sent.emit(num)
+
 
     def stop(self):
         self.is_running = False
